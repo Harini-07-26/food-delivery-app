@@ -1,13 +1,11 @@
 "use client";
 
-import React, { use, useState, useEffect } from "react";
+import React, { use, useState } from "react";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { restaurantService } from "../../../services/restaurantService";
 import { useCartStore } from "../../../store/cartStore";
-import { useUIStore } from "../../../store/uiStore";
 import { FoodCard } from "../../../components/features/menu/food-card";
-import { RatingBadge } from "../../../components/ui/rating-badge";
 import { LoadingSkeleton } from "../../../components/ui/loading-skeleton";
 import { EmptyState } from "../../../components/ui/empty-state";
 import { Button } from "../../../components/ui/button";
@@ -34,7 +32,6 @@ export default function RestaurantDetails({ params }: RestaurantDetailsProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const { items, getSubtotal, deliveryFee, getTotal, updateQuantity } =
     useCartStore();
-  const { setCartDrawerOpen } = useUIStore();
 
   // Fetch restaurant details using TanStack Query
   const {
@@ -46,16 +43,12 @@ export default function RestaurantDetails({ params }: RestaurantDetailsProps) {
     queryFn: () => restaurantService.getRestaurantById(id),
   });
 
-  // Automatically select the first category once restaurant data loads
-  useEffect(() => {
-    if (restaurant?.menu && restaurant.menu.length > 0) {
-      setSelectedCategory(restaurant.menu[0].name);
-    }
-  }, [restaurant]);
+  const selectedCategoryName =
+    selectedCategory || restaurant?.menu?.[0]?.name || "";
 
   if (isLoading) {
     return (
-      <div className="flex-grow w-full max-w-7xl mx-auto px-4 py-8 sm:px-6">
+      <div className="grow w-full max-w-7xl mx-auto px-4 py-8 sm:px-6">
         {/* Banner Skeleton */}
         <div className="h-60 sm:h-80 w-full bg-foreground/5 dark:bg-foreground/10 rounded-3xl animate-pulse mb-8"></div>
         {/* Info Skeleton */}
@@ -76,7 +69,7 @@ export default function RestaurantDetails({ params }: RestaurantDetailsProps) {
 
   if (isError || !restaurant) {
     return (
-      <div className="flex-grow flex items-center justify-center p-6">
+      <div className="grow flex items-center justify-center p-6">
         <EmptyState
           title="Restaurant not found"
           description="The restaurant you are looking for does not exist or has been removed from our listings."
@@ -96,7 +89,7 @@ export default function RestaurantDetails({ params }: RestaurantDetailsProps) {
   const isCartEmpty = items.length === 0;
 
   return (
-    <div className="flex-grow w-full flex flex-col pb-20 md:pb-8">
+    <div className="grow w-full flex flex-col pb-20 md:pb-8">
       {/* Restaurant Header Banner */}
       <section className="relative h-60 sm:h-80 w-full overflow-hidden sm:max-w-7xl sm:mx-auto sm:rounded-b-3xl shrink-0">
         <Image
@@ -106,7 +99,7 @@ export default function RestaurantDetails({ params }: RestaurantDetailsProps) {
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
 
         <div className="absolute bottom-6 left-6 right-6 text-white flex flex-col gap-2">
           <Link
@@ -197,7 +190,7 @@ export default function RestaurantDetails({ params }: RestaurantDetailsProps) {
       </section>
 
       {/* Menu Listing & Cart side view */}
-      <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 mt-8 flex-grow">
+      <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 mt-8 grow">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Menu Column (Left) */}
           <div className="lg:col-span-8 flex flex-col gap-6">
@@ -208,7 +201,7 @@ export default function RestaurantDetails({ params }: RestaurantDetailsProps) {
                   key={category.name}
                   onClick={() => setSelectedCategory(category.name)}
                   className={`px-4.5 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                    selectedCategory === category.name
+                    selectedCategoryName === category.name
                       ? "bg-brand-500 text-white shadow-sm"
                       : "bg-card border border-border text-foreground/70 hover:border-brand-500/50"
                   }`}
@@ -221,7 +214,10 @@ export default function RestaurantDetails({ params }: RestaurantDetailsProps) {
 
             {/* Menu Items grouped inside selection */}
             {restaurant.menu.map((category) => {
-              if (selectedCategory && selectedCategory !== category.name)
+              if (
+                selectedCategoryName &&
+                selectedCategoryName !== category.name
+              )
                 return null;
 
               return (
@@ -266,7 +262,7 @@ export default function RestaurantDetails({ params }: RestaurantDetailsProps) {
                   <h4 className="text-xs font-bold text-foreground mb-1">
                     Your cart is empty
                   </h4>
-                  <p className="text-[10px] text-foreground/45 max-w-[160px] font-semibold leading-relaxed">
+                  <p className="text-[10px] text-foreground/45 max-w-40 font-semibold leading-relaxed">
                     Add signature dishes from the menu to start order checkout.
                   </p>
                 </div>

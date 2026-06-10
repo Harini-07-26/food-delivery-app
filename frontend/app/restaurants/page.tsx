@@ -9,6 +9,7 @@ import { CuisineFilter } from "../../components/features/restaurants/cuisine-fil
 import { SearchInput } from "../../components/ui/search-input";
 import { LoadingSkeleton } from "../../components/ui/loading-skeleton";
 import { EmptyState } from "../../components/ui/empty-state";
+import type { Restaurant } from "../../types";
 import { SectionHeader } from "../../components/ui/section-header";
 import {
   ArrowUpDown,
@@ -22,7 +23,6 @@ export default function RestaurantListing() {
     searchQuery,
     setSearchQuery,
     selectedCuisine,
-    setSelectedCuisine,
     sortBy,
     setSortBy,
     currentPage,
@@ -31,7 +31,10 @@ export default function RestaurantListing() {
     resetFilters,
   } = useUIStore();
 
-  const { data, isLoading, isFetching, refetch, isError } = useQuery({
+  const { data, isLoading, isFetching, refetch, isError } = useQuery<
+    { data: Restaurant[]; total: number; page: number; perPage: number },
+    Error
+  >({
     queryKey: [
       "restaurants",
       searchQuery,
@@ -48,7 +51,6 @@ export default function RestaurantListing() {
         page: currentPage,
         perPage: itemsPerPage,
       }),
-    keepPreviousData: true,
   });
 
   const restaurants = data?.data ?? [];
@@ -67,7 +69,7 @@ export default function RestaurantListing() {
       : "your search";
 
   return (
-    <div className="flex-grow w-full max-w-7xl mx-auto px-4 py-8 sm:px-6">
+    <div className="grow w-full max-w-7xl mx-auto px-4 py-8 sm:px-6">
       <div className="flex flex-col gap-6 mb-8">
         <SectionHeader
           title="Browse All Kitchens"
@@ -178,7 +180,7 @@ export default function RestaurantListing() {
                     <button
                       key={pageNumber}
                       onClick={() => goToPage(pageNumber)}
-                      className={`min-w-[2.5rem] rounded-lg border px-3 py-2 text-center transition-all ${
+                      className={`min-w-10 rounded-lg border px-3 py-2 text-center transition-all ${
                         pageNumber === currentPage
                           ? "border-brand-500 bg-brand-500 text-white"
                           : "border-border bg-card text-foreground/70 hover:border-brand-500"
