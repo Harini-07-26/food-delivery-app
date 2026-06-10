@@ -1,26 +1,90 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --background: #fcfcfc;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --border: #e4e4e7;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #09090b;
+    --foreground: #f4f4f5;
+    --card: #18181b;
+    --card-foreground: #f4f4f5;
+    --border: #27272a;
+  }
+}
+
+@theme {
+  /* Override default fonts */
+  --font-sans: var(--font-plus-jakarta), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Custom CSS Theme colors mapped to CSS variables for easy dark mode support */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+
+  /* Brand Colors (Vibrant Coral/Orange - typical for high-end food delivery apps) */
+  --color-brand-50: #fff5f2;
+  --color-brand-100: #ffe8e3;
+  --color-brand-200: #ffd5cb;
+  --color-brand-300: #ffb6a3;
+  --color-brand-400: #ff8b71;
+  --color-brand-500: #ff5e3c; /* Core Brand Primary */
+  --color-brand-600: #ec3e1a;
+  --color-brand-700: #c72d0e;
+  --color-brand-800: #a4260e;
+  --color-brand-900: #882412;
+  --color-brand-950: #4a0f05;
+
+  /* Star/Rating Colors (Warm Amber/Gold) */
+  --color-star-50: #fefbeb;
+  --color-star-100: #fef3c7;
+  --color-star-200: #fde68a;
+  --color-star-300: #fcd34d;
+  --color-star-400: #fbbf24;
+  --color-star-500: #f59e0b; /* Rating Star */
+  --color-star-600: #d97706;
+  --color-star-700: #b45309;
+
+  /* Premium Design Cards Shadows */
+  --shadow-premium: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-premium-hover: 0 20px 30px -10px rgba(255, 94, 60, 0.08), 0 8px 16px -8px rgba(255, 94, 60, 0.04);
+
+  /* Interactive Scales and Spacings */
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+
+  /* Custom animations */
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s infinite linear;
+  --animate-slide-up-fade: slide-up-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes slide-up-fade {
+    from { transform: translateY(16px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
