@@ -87,11 +87,9 @@ export const FoodCard: React.FC<FoodCardProps> = ({
               <Image
                 src={item.image}
                 alt={item.name}
-                // fill
+                fill
                 sizes="(max-width: 768px) 80px, 96px"
                 className="object-cover"
-                height={'100'}
-        width={'100'}
               />
             )}
           </div>

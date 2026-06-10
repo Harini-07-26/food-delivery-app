@@ -73,11 +73,9 @@ export default function Home() {
                 <Image 
                   src="/delicious_burger.png" 
                   alt="Truffle Angus Burger" 
-                  // fill 
+                  fill 
                   className="object-cover"
                   priority
-                  height={'100'}
-        width={'100'}
                 />
               </div>
               <div className="mt-4 flex items-center justify-between">

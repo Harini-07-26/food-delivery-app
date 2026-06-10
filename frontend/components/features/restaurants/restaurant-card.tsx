@@ -17,11 +17,9 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant }) =>
     >
       <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-foreground/5 dark:bg-foreground/10">
         <Image
-        height={'100'}
-        width={'100'}
           src={restaurant.image}
           alt={restaurant.name}
-          // fill
+          fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
         />
