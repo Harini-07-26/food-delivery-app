@@ -6,6 +6,8 @@ interface UIState {
   searchQuery: string;
   selectedCuisine: string;
   sortBy: string;
+  currentPage: number;
+  itemsPerPage: number;
 
   // Actions
   setCartDrawerOpen: (isOpen: boolean) => void;
@@ -14,6 +16,8 @@ interface UIState {
   setSearchQuery: (query: string) => void;
   setSelectedCuisine: (cuisine: string) => void;
   setSortBy: (sort: string) => void;
+  setCurrentPage: (page: number) => void;
+  setItemsPerPage: (perPage: number) => void;
   resetFilters: () => void;
 }
 
@@ -23,17 +27,25 @@ export const useUIStore = create<UIState>((set) => ({
   searchQuery: "",
   selectedCuisine: "All",
   sortBy: "relevance",
+  currentPage: 1,
+  itemsPerPage: 9,
 
   setCartDrawerOpen: (isOpen) => set({ isCartDrawerOpen: isOpen }),
-  toggleCartDrawer: () => set((state) => ({ isCartDrawerOpen: !state.isCartDrawerOpen })),
+  toggleCartDrawer: () =>
+    set((state) => ({ isCartDrawerOpen: !state.isCartDrawerOpen })),
   setLocationSelectorOpen: (isOpen) => set({ isLocationSelectorOpen: isOpen }),
-  setSearchQuery: (query) => set({ searchQuery: query }),
-  setSelectedCuisine: (cuisine) => set({ selectedCuisine: cuisine }),
-  setSortBy: (sort) => set({ sortBy: sort }),
-  
-  resetFilters: () => set({
-    searchQuery: "",
-    selectedCuisine: "All",
-    sortBy: "relevance",
-  }),
+  setSearchQuery: (query) => set({ searchQuery: query, currentPage: 1 }),
+  setSelectedCuisine: (cuisine) =>
+    set({ selectedCuisine: cuisine, currentPage: 1 }),
+  setSortBy: (sort) => set({ sortBy: sort, currentPage: 1 }),
+  setCurrentPage: (page) => set({ currentPage: page }),
+  setItemsPerPage: (perPage) => set({ itemsPerPage: perPage }),
+
+  resetFilters: () =>
+    set({
+      searchQuery: "",
+      selectedCuisine: "All",
+      sortBy: "relevance",
+      currentPage: 1,
+    }),
 }));

@@ -6,34 +6,43 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const restaurantService = {
   /**
-   * Fetch restaurants with filtering and sorting
+   * Fetch restaurants with filtering, sorting, and pagination
    */
   async getRestaurants(options?: {
     search?: string;
     cuisine?: string;
     sortBy?: string;
-  }): Promise<Restaurant[]> {
+    page?: number;
+    perPage?: number;
+  }): Promise<{
+    data: Restaurant[];
+    total: number;
+    page: number;
+    perPage: number;
+  }> {
     await delay(800); // Simulate API latency to show skeleton loading states
-    
+
     let result = [...MOCK_RESTAURANTS];
-    
+
     // Filter by search query
     if (options?.search) {
       const searchLower = options.search.toLowerCase();
       result = result.filter(
         (r) =>
           r.name.toLowerCase().includes(searchLower) ||
-          r.cuisines.some((c) => c.toLowerCase().includes(searchLower))
+          r.cuisines.some((c) => c.toLowerCase().includes(searchLower)),
       );
     }
-    
+
     // Filter by cuisine
     if (options?.cuisine && options.cuisine !== "All") {
       result = result.filter((r) =>
-        r.cuisines.some((c) => c.toLowerCase() === options.cuisine?.toLowerCase())
+        r.cuisines.some(
+          (c) => c.toLowerCase() === options.cuisine?.toLowerCase(),
+        ),
       );
     }
-    
+
     // Apply sorting
     if (options?.sortBy) {
       switch (options.sortBy) {
@@ -53,8 +62,14 @@ export const restaurantService = {
           break;
       }
     }
-    
-    return result;
+
+    const total = result.length;
+    const perPage = options?.perPage ?? 9;
+    const page = Math.max(1, options?.page ?? 1);
+    const start = (page - 1) * perPage;
+    const data = result.slice(start, start + perPage);
+
+    return { data, total, page, perPage };
   },
 
   /**
@@ -72,5 +87,5 @@ export const restaurantService = {
   async getCategories(): Promise<Category[]> {
     await delay(500);
     return MOCK_CATEGORIES;
-  }
+  },
 };
